@@ -12,6 +12,7 @@
     "front/src/**/*.ts"
   ],
   "exclude": [
-    "src/**/*.spec.ts"
+    "src/**/*.spec.ts",
+    "front/src/server.ts"
   ]
 }
