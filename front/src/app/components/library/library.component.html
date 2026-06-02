@@ -1,0 +1,189 @@
+<!-- ░░ HEADER ░░ -->
+<header class="lib-header">
+  <div class="header-top">
+    <div class="header-brand">
+      <span class="brand-ornament">⚜</span>
+      <div>
+        <h1 class="brand-title">Bookly</h1>
+        <p class="brand-subtitle">Colección Personal</p>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        class="search-input"
+        type="search"
+        placeholder="Buscar por título, autor o género…"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+      />
+    </div>
+
+    <!-- Add button -->
+    <button class="btn-add-header" (click)="showAddModal.set(true)">
+      <span class="add-icon">＋</span>
+      <span>Añadir libro</span>
+    </button>
+
+    <!-- Sync button -->
+    @if (bookService.hasPendingSync()) {
+      <button
+        class="btn-sync"
+        [class.syncing]="bookService.isSyncing()"
+        [disabled]="bookService.isSyncing() || !bookService.isOnline()"
+        (click)="syncNow()"
+        [title]="bookService.isOnline() ? 'Sincronizar cambios pendientes' : 'Sin conexión'"
+      >
+        <span class="sync-icon">⟳</span>
+        <span class="sync-label">
+          @if (bookService.isSyncing()) {
+            Sincronizando…
+          } @else {
+            Sincronizar ({{ bookService.pendingCount() }})
+          }
+        </span>
+      </button>
+    }
+
+    <!-- Offline badge -->
+    @if (!bookService.isOnline()) {
+      <span class="badge-offline" title="Sin conexión a Internet">
+        ✦ Sin conexión
+      </span>
+    }
+
+    <!-- User menu -->
+    <div class="user-menu">
+      <span class="user-name">{{ auth.currentUser()?.name }}</span>
+      <button class="btn-logout" (click)="auth.logout()" title="Cerrar sesión">⏻</button>
+    </div>
+  </div>
+
+  @if (bookService.syncError()) {
+    <div class="sync-error-banner">
+      ⚠ {{ bookService.syncError() }}
+    </div>
+  }
+
+  <div class="header-rule"></div>
+</header>
+
+<!-- ░░ HERO ░░ -->
+<section class="hero">
+  <div class="hero-books-decoration" aria-hidden="true">
+    @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track i) {
+      <div class="deco-book" [class]="'deco-book-' + i"></div>
+    }
+  </div>
+  <div class="hero-content">
+    <p class="hero-pre">✦ ✦ ✦</p>
+    <h2 class="hero-title">TU BIBLIOTECA DIGITAL</h2>
+    <p class="hero-tagline">Escanea · Colecciona · Valora</p>
+    <p class="hero-post">✦ ✦ ✦</p>
+  </div>
+</section>
+
+<!-- ░░ STATS ░░ -->
+@if (bookService.books().length > 0) {
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-value">{{ bookService.books().length }}</span>
+      <span class="stat-label">Libros</span>
+    </div>
+    <div class="stat-divider">❧</div>
+    <div class="stat">
+      <span class="stat-value">{{ bookService.books().length - bookService.books().filter(b => !b.rating).length }}</span>
+      <span class="stat-label">Valorados</span>
+    </div>
+    <div class="stat-divider">❧</div>
+    <div class="stat">
+      <span class="stat-value stars-avg">{{ avgRating() > 0 ? avgRating() + ' ★' : '—' }}</span>
+      <span class="stat-label">Media</span>
+    </div>
+  </div>
+}
+
+<!-- ░░ COLECCIÓN ░░ -->
+<main class="lib-main">
+  <div class="section-heading">
+    <span class="section-orn">⁂</span>
+    <h2 class="section-title">COLECCIÓN</h2>
+    <span class="section-orn">⁂</span>
+  </div>
+
+  @if (bookService.isLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner">⟳</div>
+      <p>Cargando biblioteca…</p>
+    </div>
+  }
+
+  @if (bookService.loadError()) {
+    <div class="error-state">
+      <p>⚠ {{ bookService.loadError() }}</p>
+      @if (bookService.isOnline()) {
+        <button class="btn-retry" (click)="bookService.load().subscribe()">Reintentar</button>
+      }
+    </div>
+  }
+
+  @if (!bookService.isLoading() && !bookService.loadError()) {
+    @if (bookService.books().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <h3 class="empty-title">Tu biblioteca está vacía</h3>
+        <p class="empty-sub">Añade tu primer libro escaneando su código ISBN</p>
+        <button class="btn-add-empty" (click)="showAddModal.set(true)">
+          ✦ Añadir primer libro ✦
+        </button>
+      </div>
+    } @else if (filteredBooks().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <p class="empty-sub">No hay libros que coincidan con "{{ searchQuery() }}"</p>
+      </div>
+    } @else {
+      <div class="shelves">
+        @for (shelf of shelves(); track $index) {
+          <div class="shelf">
+            <div class="shelf-books">
+              @for (book of shelf; track book.id) {
+                <app-book-card [book]="book" (select)="selectedBook.set($event)" />
+              }
+              @for (e of emptySlots(shelf); track e) {
+                <div class="shelf-gap"></div>
+              }
+            </div>
+            <div class="shelf-plank">
+              <div class="shelf-plank-edge"></div>
+              <div class="shelf-knot"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</main>
+
+<!-- ░░ FAB ░░ -->
+<button class="fab" (click)="showAddModal.set(true)" aria-label="Añadir libro">
+  <span class="fab-icon">＋</span>
+</button>
+
+<!-- ░░ FOOTER ░░ -->
+<footer class="lib-footer">
+  <div class="footer-rule"></div>
+  <p class="footer-text">❦ Bookly Personal ❦</p>
+</footer>
+
+<!-- ░░ MODALS ░░ -->
+@if (showAddModal()) {
+  <app-add-book (closed)="showAddModal.set(false)" />
+}
+
+@if (selectedBook()) {
+  <app-book-detail [book]="selectedBook()!" (closed)="selectedBook.set(null)" />
+}
+

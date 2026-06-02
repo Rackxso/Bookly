@@ -1,0 +1,236 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  background:
+    linear-gradient(to bottom, rgba(13, 7, 2, 0.6) 0%, rgba(13, 7, 2, 0.85) 100%),
+    linear-gradient(180deg, #2c1506 0%, #1a0e07 100%);
+  overflow: hidden;
+}
+
+/* ── Decoración estantería ──────────────────────────────────── */
+.deco-shelf {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 240px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 2rem;
+  gap: 6px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.deco-book {
+  border-radius: 2px 5px 5px 2px;
+  flex-shrink: 0;
+  box-shadow: inset -2px 0 4px rgba(0,0,0,0.4);
+}
+.deco-b-1  { width:20px; height:185px; background:#1e4d8c; }
+.deco-b-2  { width:26px; height:155px; background:#2d6b3c; }
+.deco-b-3  { width:18px; height:200px; background:#8b2b17; }
+.deco-b-4  { width:22px; height:170px; background:#5b3d7a; }
+.deco-b-5  { width:28px; height:190px; background:#1a6b6b; }
+.deco-b-6  { width:16px; height:145px; background:#7a4a1a; }
+.deco-b-7  { width:24px; height:205px; background:#3d1a5a; }
+.deco-b-8  { width:20px; height:165px; background:#6b1a3d; }
+.deco-b-9  { width:22px; height:178px; background:#2b4a6b; }
+.deco-b-10 { width:18px; height:150px; background:#5c3d1e; }
+.deco-b-11 { width:26px; height:192px; background:#1e4d8c; }
+.deco-b-12 { width:20px; height:158px; background:#8b2b17; }
+.deco-b-13 { width:24px; height:183px; background:#2d6b3c; }
+.deco-b-14 { width:16px; height:140px; background:#5b3d7a; }
+
+.shelf-plank {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: linear-gradient(180deg, #7a4020 0%, #5c2e0e 40%, #8b4a20 60%, #3d1a08 100%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.auth-card {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(160deg, #2a1a0a 0%, #1a0e07 50%, #0d0702 100%);
+  border: 1px solid rgba(201, 164, 80, 0.5);
+  border-radius: 4px;
+  padding: 2rem 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow:
+    0 0 0 1px rgba(201, 164, 80, 0.12),
+    0 32px 80px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(201, 164, 80, 0.1);
+  animation: fadeInUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+/* ── Brand ──────────────────────────────────────────────────── */
+.auth-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.brand-icon {
+  font-size: 1.5rem;
+  color: #c9a450;
+  text-shadow: 0 0 16px rgba(201, 164, 80, 0.5);
+}
+
+.brand-name {
+  font-family: 'IM Fell English', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #e8c870;
+  letter-spacing: 0.05em;
+}
+
+/* ── Divider ────────────────────────────────────────────────── */
+.auth-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c9a450, transparent);
+  opacity: 0.35;
+  margin: 1rem 0;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.auth-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.auth-title {
+  font-family: 'IM Fell English', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: #d4b870;
+  letter-spacing: 0.08em;
+}
+
+.orn {
+  color: #c9a450;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+/* ── Form ───────────────────────────────────────────────────── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  color: #8b7050;
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
+
+.field-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(201, 164, 80, 0.35);
+  border-radius: 3px;
+  color: #f2e4c0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  padding: 0.55rem 0.75rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.field-input::placeholder { color: #4a3a1a; }
+.field-input:focus {
+  border-color: #c9a450;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Error ──────────────────────────────────────────────────── */
+.error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  background: rgba(139, 43, 23, 0.18);
+  border: 1px solid rgba(139, 43, 23, 0.4);
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
+  color: #e8a090;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  animation: fadeIn 0.2s;
+}
+
+/* ── Submit ─────────────────────────────────────────────────── */
+.btn-submit {
+  margin-top: 0.25rem;
+  padding: 0.65rem;
+  background: linear-gradient(135deg, #5c2e0e 0%, #8b5e20 40%, #c9a450 60%, #8b5e20 80%, #5c2e0e 100%);
+  background-size: 200% 100%;
+  border: 1px solid rgba(201, 164, 80, 0.6);
+  border-radius: 4px;
+  color: #f2e4c0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background-position 0.5s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-submit:hover:not(:disabled) {
+  background-position: 100% 0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(201, 164, 80, 0.25);
+}
+.btn-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.2rem;
+}
+
+/* ── Switch ─────────────────────────────────────────────────── */
+.auth-switch {
+  text-align: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  color: #7a6040;
+}
+
+.auth-link {
+  color: #c9a450;
+  text-decoration: none;
+  font-style: italic;
+  transition: color 0.2s;
+}
+.auth-link:hover { color: #e8c870; }
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
+@keyframes spin      { to { transform: rotate(360deg); } }
+@keyframes fadeInUp  {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

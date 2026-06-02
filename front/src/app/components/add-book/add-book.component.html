@@ -1,0 +1,146 @@
+<div class="backdrop" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()" aria-label="Cerrar">✕</button>
+
+    <!-- Header -->
+    <div class="modal-header">
+      <span class="ornament">❦</span>
+      <h2 class="modal-title">Añadir Libro</h2>
+      <span class="ornament">❦</span>
+    </div>
+    <div class="divider"></div>
+
+    <!-- ISBN Input -->
+    <div class="isbn-section">
+      <label class="field-label">ISBN del libro</label>
+      <div class="isbn-row">
+        <input
+          type="text"
+          class="isbn-input"
+          placeholder="Ej: 9788420481494"
+          [ngModel]="isbn()"
+          (ngModelChange)="isbn.set($event)"
+          (keyup.enter)="lookup()"
+          inputmode="numeric"
+          maxlength="17"
+        />
+        <button class="btn-lookup" (click)="lookup()" [disabled]="isLoading() || !isbn().trim()">
+          @if (isLoading()) {
+            <span class="spinner">⟳</span>
+          } @else {
+            <span>Buscar</span>
+          }
+        </button>
+      </div>
+
+      @if (hasBarcodeSupport()) {
+        <button
+          class="btn-scan"
+          (click)="isScanning() ? stopScanner() : startScanner()"
+          [class.active]="isScanning()"
+        >
+          @if (isScanning()) {
+            <span>⏹ Detener escáner</span>
+          } @else {
+            <span>📷 Escanear código de barras</span>
+          }
+        </button>
+      } @else {
+        <p class="scan-hint">
+          Introduce el ISBN (está en la contraportada del libro, bajo el código de
+          barras)
+        </p>
+      }
+    </div>
+
+    <!-- Video scanner -->
+    @if (isScanning()) {
+      <div class="scanner-wrapper">
+        <video #videoEl autoplay playsinline muted class="scanner-video"></video>
+        <div class="scanner-frame">
+          <div class="corner tl"></div>
+          <div class="corner tr"></div>
+          <div class="corner bl"></div>
+          <div class="corner br"></div>
+          <div class="scan-line"></div>
+        </div>
+        <p class="scanner-hint">Apunta al código de barras del libro</p>
+      </div>
+    }
+
+    <!-- Error -->
+    @if (errorMsg()) {
+      <div class="error-banner">
+        <span>⚠</span>
+        <span>{{ errorMsg() }}</span>
+      </div>
+    }
+
+    <!-- Book preview -->
+    @if (bookData()) {
+      <div class="book-preview">
+        <div class="preview-cover">
+          @if (bookData()!.coverUrl && !imgError()) {
+            <img
+              [src]="bookData()!.coverUrl"
+              [alt]="bookData()!.title"
+              class="preview-img"
+              (error)="onCoverError()"
+            />
+          } @else {
+            <div class="preview-cover-placeholder">
+              <span>📚</span>
+            </div>
+          }
+        </div>
+        <div class="preview-meta">
+          <h3 class="preview-title">{{ bookData()!.title }}</h3>
+          <p class="preview-authors">{{ bookData()!.authors.join(', ') }}</p>
+          @if (bookData()!.publisher) {
+            <p class="preview-detail">
+              {{ bookData()!.publisher }}
+              @if (bookData()!.publishedDate) {
+                · {{ bookData()!.publishedDate }}
+              }
+            </p>
+          }
+          @if (bookData()!.pageCount) {
+            <p class="preview-detail">{{ bookData()!.pageCount }} páginas</p>
+          }
+          @if (bookData()!.categories?.length) {
+            <p class="preview-detail">{{ bookData()!.categories[0] }}</p>
+          }
+        </div>
+      </div>
+
+      @if (bookData()!.description) {
+        <p class="preview-description">{{ bookData()!.description | slice: 0 : 220 }}…</p>
+      }
+
+      <div class="divider"></div>
+
+      <!-- Rating -->
+      <div class="form-field">
+        <label class="field-label">Tu valoración</label>
+        <app-star-rating [value]="rating()" (changed)="rating.set($event)" />
+      </div>
+
+      <!-- Notes -->
+      <div class="form-field">
+        <label class="field-label">Notas personales</label>
+        <textarea
+          class="notes-input"
+          placeholder="Impresiones, citas favoritas, recomendaciones…"
+          rows="3"
+          [ngModel]="notes()"
+          (ngModelChange)="notes.set($event)"
+        ></textarea>
+      </div>
+
+      <button class="btn-add" (click)="addBook()" [disabled]="isSaving()">
+        @if (isSaving()) { <span class="btn-spinner">⟳</span> Guardando… }
+        @else { ✦ Añadir a Bookly ✦ }
+      </button>
+    }
+  </div>
+</div>

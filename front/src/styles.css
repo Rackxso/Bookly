@@ -1,0 +1,56 @@
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Tokens ── */
+:root {
+  --bg:         #0d0702;
+  --wood-dark:  #2c1506;
+  --wood-mid:   #3d1a08;
+  --wood-light: #6b3015;
+  --gold:       #c9a450;
+  --gold-light: #e8c870;
+  --gold-dim:   #8b6b30;
+  --paper:      #f2e4c0;
+  --paper-dark: #d4c098;
+  --text-light: #f2e4c0;
+  --text-muted: #a08858;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--bg);
+  color: var(--text-light);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar        { width: 7px; height: 7px; }
+::-webkit-scrollbar-track  { background: var(--wood-dark); }
+::-webkit-scrollbar-thumb  { background: var(--wood-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* ── Focus ring ── */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(201, 164, 80, 0.3);
+  color: var(--paper);
+}

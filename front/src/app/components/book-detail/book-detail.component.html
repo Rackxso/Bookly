@@ -1,0 +1,145 @@
+<div class="backdrop" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()" aria-label="Cerrar">✕</button>
+
+    <div class="modal-body">
+      <!-- Cover -->
+      <div class="cover-column">
+        <div class="cover-wrapper">
+          @if (book().coverUrl && !imgError()) {
+            <img
+              [src]="book().coverUrl"
+              [alt]="book().title"
+              class="cover-img"
+              (error)="imgError.set(true)"
+            />
+          } @else {
+            <div class="cover-placeholder">
+              <span class="placeholder-text">{{ book().title }}</span>
+            </div>
+          }
+          <div class="cover-shine"></div>
+        </div>
+
+        @if (book().isbn) {
+          <p class="isbn-label">ISBN: {{ book().isbn }}</p>
+        }
+      </div>
+
+      <!-- Info -->
+      <div class="info-column">
+        <div class="modal-header">
+          <span class="ornament">❦</span>
+          <h2 class="book-title">{{ book().title }}</h2>
+          <span class="ornament">❦</span>
+        </div>
+
+        <p class="book-authors">{{ book().authors.join(', ') }}</p>
+
+        <div class="meta-row">
+          @if (book().publisher) {
+            <span class="meta-chip">{{ book().publisher }}</span>
+          }
+          @if (publishYear) {
+            <span class="meta-chip">{{ publishYear }}</span>
+          }
+          @if (book().pageCount) {
+            <span class="meta-chip">{{ book().pageCount }} págs.</span>
+          }
+          @if (book().language) {
+            <span class="meta-chip">{{ book().language | uppercase }}</span>
+          }
+        </div>
+
+        @if (book().categories.length) {
+          <div class="categories-row">
+            @for (cat of book().categories.slice(0, 3); track cat) {
+              <span class="category-tag">{{ cat }}</span>
+            }
+          </div>
+        }
+
+        <div class="divider"></div>
+
+        <!-- Rating -->
+        <div class="rating-section">
+          <span class="section-label">Valoración</span>
+          @if (isEditing()) {
+            <app-star-rating [value]="rating()" (changed)="rating.set($event)" />
+          } @else {
+            <div class="rating-display">
+              <app-star-rating [value]="book().rating" [readonly]="true" />
+              @if (!book().rating) {
+                <span class="no-rating">Sin valorar</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Notes -->
+        <div class="notes-section">
+          <span class="section-label">Notas personales</span>
+          @if (isEditing()) {
+            <textarea
+              class="notes-input"
+              rows="4"
+              placeholder="Escribe tus impresiones, citas favoritas…"
+              [ngModel]="notes()"
+              (ngModelChange)="notes.set($event)"
+            ></textarea>
+          } @else {
+            <div class="notes-display">
+              @if (book().notes) {
+                <p class="notes-text">{{ book().notes }}</p>
+              } @else {
+                <p class="no-notes">Sin notas todavía</p>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          @if (isEditing()) {
+            <button class="btn-save" (click)="save()" [disabled]="isSaving()">
+              @if (isSaving()) { <span class="btn-spinner">⟳</span> Guardando… }
+              @else { Guardar cambios }
+            </button>
+            <button class="btn-cancel" (click)="isEditing.set(false)" [disabled]="isSaving()">
+              Cancelar
+            </button>
+          } @else {
+            <button class="btn-edit" (click)="isEditing.set(true)">✎ Editar</button>
+            @if (!showDelete()) {
+              <button class="btn-delete" (click)="showDelete.set(true)">🗑 Eliminar</button>
+            } @else {
+              <div class="delete-confirm">
+                <span>¿Seguro?</span>
+                <button class="btn-confirm-delete" (click)="deleteBook()" [disabled]="isDeleting()">
+                  @if (isDeleting()) { <span class="btn-spinner">⟳</span> } @else { Sí, eliminar }
+                </button>
+                <button class="btn-cancel" (click)="showDelete.set(false)">No</button>
+              </div>
+            }
+          }
+        </div>
+
+        @if (saved()) {
+          <p class="saved-msg">✓ Cambios guardados</p>
+        }
+        @if (saveError()) {
+          <p class="save-error-msg">⚠ {{ saveError() }}</p>
+        }
+      </div>
+    </div>
+
+    <!-- Description -->
+    @if (book().description) {
+      <div class="description-section">
+        <div class="divider"></div>
+        <p class="description-title">Sinopsis</p>
+        <p class="description-text">{{ book().description }}</p>
+      </div>
+    }
+  </div>
+</div>

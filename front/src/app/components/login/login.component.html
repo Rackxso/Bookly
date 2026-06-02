@@ -1,0 +1,78 @@
+<div class="auth-page">
+  <!-- Libros decorativos de fondo -->
+  <div class="deco-shelf" aria-hidden="true">
+    @for (i of [1,2,3,4,5,6,7,8,9,10,11,12,13,14]; track i) {
+      <div class="deco-book" [class]="'deco-b-' + i"></div>
+    }
+    <div class="shelf-plank"></div>
+  </div>
+
+  <div class="auth-card">
+    <!-- Logo / título -->
+    <div class="auth-brand">
+      <span class="brand-icon">⚜</span>
+      <h1 class="brand-name">Bookly</h1>
+    </div>
+
+    <div class="auth-divider"></div>
+
+    <div class="auth-header">
+      <span class="orn">❦</span>
+      <h2 class="auth-title">Iniciar sesión</h2>
+      <span class="orn">❦</span>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="submit()">
+      <div class="field">
+        <label class="field-label" for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          class="field-input"
+          placeholder="tu@email.com"
+          autocomplete="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          class="field-input"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          name="password"
+          required
+        />
+      </div>
+
+      @if (errorMsg()) {
+        <div class="error-banner">
+          <span>⚠</span> {{ errorMsg() }}
+        </div>
+      }
+
+      <button type="submit" class="btn-submit" [disabled]="isLoading()">
+        @if (isLoading()) {
+          <span class="spinner">⟳</span> Entrando…
+        } @else {
+          ✦ Entrar ✦
+        }
+      </button>
+    </form>
+
+    <div class="auth-divider"></div>
+
+    <p class="auth-switch">
+      ¿No tienes cuenta?
+      <a routerLink="/register" class="auth-link">Regístrate aquí</a>
+    </p>
+  </div>
+</div>
