@@ -8,15 +8,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = auth.token;
 
   // Añade el JWT a todas las peticiones a /api
+  const isApiCall = req.url.includes('/api/');
   const authReq =
-    token && req.url.startsWith('/api')
+    token && isApiCall
       ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
       : req;
 
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      // Si el servidor responde 401, la sesión expiró → cerrar sesión
-      if (err.status === 401 && req.url.startsWith('/api') && !req.url.includes('/auth/')) {
+      if (err.status === 401 && isApiCall && !req.url.includes('/auth/')) {
         auth.logout();
       }
       return throwError(() => err);
