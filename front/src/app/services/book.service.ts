@@ -14,6 +14,7 @@ import {
   finalize,
 } from 'rxjs';
 import { Book } from '../models/book.model';
+import { environment } from '../../environments/environment';
 import { OfflineQueueService } from './offline-queue.service';
 import { AuthService } from './auth.service';
 
@@ -25,7 +26,7 @@ export class BookService {
   private queue = inject(OfflineQueueService);
   private auth = inject(AuthService);
 
-  private readonly API = '/api/books';
+  private readonly API = `${environment.apiUrl}/api/books`;
 
   // ── Estado ───────────────────────────────────────────────────────
   books = signal<Book[]>([]);

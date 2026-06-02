@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { User, AuthResponse } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 const TOKEN_KEY = 'bib_token';
 
@@ -26,13 +27,13 @@ export class AuthService {
 
   register(name: string, email: string, password: string): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>('/api/auth/register', { name, email, password })
+      .post<AuthResponse>(`${environment.apiUrl}/api/auth/register`, { name, email, password })
       .pipe(tap(r => this.setSession(r)));
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>('/api/auth/login', { email, password })
+      .post<AuthResponse>(`${environment.apiUrl}/api/auth/login`, { email, password })
       .pipe(tap(r => this.setSession(r)));
   }
 
