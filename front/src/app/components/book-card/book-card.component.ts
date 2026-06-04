@@ -26,6 +26,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
           </div>
         }
         <div class="cover-shine"></div>
+        @if (book().read) {
+          <div class="read-badge" title="Leído">✓</div>
+        }
         <div class="cover-overlay">
           <p class="overlay-author">{{ book().authors.join(', ') }}</p>
           @if (book().publishedDate) {
@@ -99,6 +102,22 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
         font-size: 0.75rem;
         text-align: center;
         font-style: italic;
+      }
+      .read-badge {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(122, 184, 144, 0.9);
+        color: #1a1a1a;
+        font-size: 0.65rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.5);
       }
       .cover-shine {
         position: absolute;

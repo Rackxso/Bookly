@@ -33,6 +33,10 @@ export class BookDetailComponent implements OnInit {
     this.notes.set(this.book().notes);
   }
 
+  toggleRead() {
+    this.bookService.update(this.book().id, { read: !this.book().read }).subscribe();
+  }
+
   save() {
     if (this.isSaving()) return;
     this.isSaving.set(true);

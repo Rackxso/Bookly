@@ -94,6 +94,11 @@
     </div>
     <div class="stat-divider">❧</div>
     <div class="stat">
+      <span class="stat-value">{{ bookService.books().filter(b => b.read).length }}</span>
+      <span class="stat-label">Leídos</span>
+    </div>
+    <div class="stat-divider">❧</div>
+    <div class="stat">
       <span class="stat-value">{{ bookService.books().length - bookService.books().filter(b => !b.rating).length }}</span>
       <span class="stat-label">Valorados</span>
     </div>

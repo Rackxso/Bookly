@@ -61,6 +61,13 @@
 
         <div class="divider"></div>
 
+        <!-- Read toggle -->
+        <div class="read-section">
+          <button class="btn-read" [class.read]="book().read" (click)="toggleRead()">
+            {{ book().read ? '✓ Leído' : '○ No leído' }}
+          </button>
+        </div>
+
         <!-- Rating -->
         <div class="rating-section">
           <span class="section-label">Valoración</span>

@@ -12,5 +12,6 @@ export interface Book {
   language: string;
   rating: number;
   notes: string;
+  read: boolean;
   addedAt: string;
 }
