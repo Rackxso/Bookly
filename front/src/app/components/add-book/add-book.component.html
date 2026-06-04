@@ -10,8 +10,14 @@
     </div>
     <div class="divider"></div>
 
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab" [class.active]="mode() === 'isbn'" (click)="mode.set('isbn')">Por ISBN</button>
+      <button class="mode-tab" [class.active]="mode() === 'manual'" (click)="mode.set('manual')">Manual</button>
+    </div>
+
     <!-- ISBN Input -->
-    <div class="isbn-section">
+    <div class="isbn-section" [class.hidden]="mode() === 'manual'">
       <label class="field-label">ISBN del libro</label>
       <div class="isbn-row">
         <input
@@ -69,8 +75,56 @@
       </div>
     }
 
-    <!-- Error -->
-    @if (errorMsg()) {
+    <!-- Manual form -->
+    @if (mode() === 'manual') {
+      <div class="manual-form">
+        <div class="form-field">
+          <label class="field-label">Título <span class="required">*</span></label>
+          <input class="manual-input" type="text" placeholder="Título del libro" [ngModel]="manualTitle()" (ngModelChange)="manualTitle.set($event)" />
+        </div>
+        <div class="form-field">
+          <label class="field-label">Autor/es <span class="field-hint">(separados por coma)</span></label>
+          <input class="manual-input" type="text" placeholder="Ej: Gabriel García Márquez, otro autor" [ngModel]="manualAuthors()" (ngModelChange)="manualAuthors.set($event)" />
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="field-label">Editorial</label>
+            <input class="manual-input" type="text" placeholder="Editorial" [ngModel]="manualPublisher()" (ngModelChange)="manualPublisher.set($event)" />
+          </div>
+          <div class="form-field">
+            <label class="field-label">Año</label>
+            <input class="manual-input" type="text" placeholder="2024" [ngModel]="manualDate()" (ngModelChange)="manualDate.set($event)" />
+          </div>
+          <div class="form-field">
+            <label class="field-label">Páginas</label>
+            <input class="manual-input" type="number" placeholder="300" [ngModel]="manualPages()" (ngModelChange)="manualPages.set($event)" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="field-label">URL de portada</label>
+          <input class="manual-input" type="url" placeholder="https://…" [ngModel]="manualCover()" (ngModelChange)="manualCover.set($event)" />
+        </div>
+        <div class="form-field">
+          <label class="field-label">Valoración</label>
+          <app-star-rating [value]="manualRating()" (changed)="manualRating.set($event)" />
+        </div>
+        <div class="form-field">
+          <label class="field-label">Notas personales</label>
+          <textarea class="notes-input" rows="3" placeholder="Impresiones, citas favoritas…" [ngModel]="manualNotes()" (ngModelChange)="manualNotes.set($event)"></textarea>
+        </div>
+
+        @if (errorMsg()) {
+          <div class="error-banner"><span>⚠</span><span>{{ errorMsg() }}</span></div>
+        }
+
+        <button class="btn-add" (click)="addManual()" [disabled]="isSaving() || !manualTitle().trim()">
+          @if (isSaving()) { <span class="btn-spinner">⟳</span> Guardando… }
+          @else { ✦ Añadir a Bookly ✦ }
+        </button>
+      </div>
+    }
+
+    @if (mode() === 'isbn' && errorMsg()) {
       <div class="error-banner">
         <span>⚠</span>
         <span>{{ errorMsg() }}</span>

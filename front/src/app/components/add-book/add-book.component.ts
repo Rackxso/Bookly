@@ -29,6 +29,9 @@ export class AddBookComponent implements OnDestroy {
 
   closed = output<void>();
 
+  mode = signal<'isbn' | 'manual'>('isbn');
+
+  // ISBN mode
   isbn = signal('');
   isLoading = signal(false);
   errorMsg = signal('');
@@ -36,6 +39,16 @@ export class AddBookComponent implements OnDestroy {
   rating = signal(0);
   notes = signal('');
   imgError = signal(false);
+
+  // Manual mode
+  manualTitle = signal('');
+  manualAuthors = signal('');
+  manualPublisher = signal('');
+  manualDate = signal('');
+  manualPages = signal('');
+  manualCover = signal('');
+  manualRating = signal(0);
+  manualNotes = signal('');
 
   isScanning = signal(false);
   hasBarcodeSupport = signal(false);
@@ -131,6 +144,36 @@ export class AddBookComponent implements OnDestroy {
   }
 
   isSaving = signal(false);
+
+  addManual() {
+    if (!this.manualTitle().trim() || this.isSaving()) return;
+    this.isSaving.set(true);
+    this.errorMsg.set('');
+
+    const data: BookData = {
+      isbn: '',
+      title: this.manualTitle().trim(),
+      authors: this.manualAuthors().split(',').map(a => a.trim()).filter(Boolean),
+      description: '',
+      coverUrl: this.manualCover().trim(),
+      publishedDate: this.manualDate().trim(),
+      publisher: this.manualPublisher().trim(),
+      pageCount: parseInt(this.manualPages()) || 0,
+      categories: [],
+      language: '',
+      rating: this.manualRating(),
+      notes: this.manualNotes(),
+      read: false,
+    };
+
+    this.bookService.add(data).subscribe({
+      next: () => this.closed.emit(),
+      error: () => {
+        this.errorMsg.set('Error al guardar el libro. Inténtalo de nuevo.');
+        this.isSaving.set(false);
+      },
+    });
+  }
 
   addBook() {
     const data = this.bookData();

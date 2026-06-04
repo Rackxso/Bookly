@@ -354,6 +354,80 @@
   margin: 0.5rem 0;
 }
 
+/* Mode tabs */
+.mode-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.mode-tab {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(201, 164, 80, 0.25);
+  border-radius: 3px;
+  color: #7a6040;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mode-tab.active {
+  background: rgba(201, 164, 80, 0.12);
+  border-color: #c9a450;
+  color: #c9a450;
+}
+
+/* Manual form */
+.manual-form {
+  animation: fadeIn 0.2s ease;
+}
+
+.manual-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(201, 164, 80, 0.3);
+  border-radius: 3px;
+  color: #f2e4c0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.75rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.manual-input:focus {
+  border-color: #c9a450;
+}
+.manual-input::placeholder {
+  color: #5a4a2a;
+  font-style: italic;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.75rem;
+}
+.form-row .form-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.required {
+  color: #c87060;
+}
+
+.field-hint {
+  color: #5a4a2a;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.hidden {
+  display: none;
+}
+
 /* Form fields */
 .form-field {
   margin: 0.75rem 0;
