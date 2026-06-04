@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Book } from '../../models/book.model';
 import { BookService } from '../../services/book.service';
 import { AuthService } from '../../services/auth.service';
@@ -17,10 +18,24 @@ import { BookDetailComponent } from '../book-detail/book-detail.component';
 export class LibraryComponent {
   protected bookService = inject(BookService);
   protected auth = inject(AuthService);
+  private platformId = inject(PLATFORM_ID);
 
   showAddModal = signal(false);
   selectedBook = signal<Book | null>(null);
   searchQuery  = signal('');
+
+  private calcShelfSize(): number {
+    if (!isPlatformBrowser(this.platformId)) return 6;
+    // card: 148px, gap: 20px, padding lateral ~92px
+    return Math.max(1, Math.floor((window.innerWidth - 92) / 168));
+  }
+
+  booksPerShelf = signal(this.calcShelfSize());
+
+  @HostListener('window:resize')
+  onResize() {
+    this.booksPerShelf.set(this.calcShelfSize());
+  }
 
   constructor() {
     this.bookService.load().subscribe();
@@ -39,7 +54,7 @@ export class LibraryComponent {
 
   shelves = computed(() => {
     const books = this.filteredBooks();
-    const size = 5;
+    const size = this.booksPerShelf();
     const result: Book[][] = [];
     for (let i = 0; i < books.length; i += size) {
       result.push(books.slice(i, i + size));
@@ -54,7 +69,7 @@ export class LibraryComponent {
   });
 
   emptySlots(shelf: Book[]): number[] {
-    return Array.from({ length: Math.max(0, 5 - shelf.length) }, (_, i) => i);
+    return Array.from({ length: Math.max(0, this.booksPerShelf() - shelf.length) }, (_, i) => i);
   }
 
   syncNow(): void {
