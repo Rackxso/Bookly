@@ -155,7 +155,7 @@
           <div class="shelf">
             <div class="shelf-books">
               @for (book of shelf; track book.id) {
-                <app-book-card [book]="book" (select)="selectedBook.set($event)" />
+                <app-book-card [book]="book" (select)="selectedBookId.set($event.id)" />
               }
               @for (e of emptySlots(shelf); track e) {
                 <div class="shelf-gap"></div>
@@ -189,6 +189,6 @@
 }
 
 @if (selectedBook()) {
-  <app-book-detail [book]="selectedBook()!" (closed)="selectedBook.set(null)" />
+  <app-book-detail [book]="selectedBook()!" (closed)="selectedBookId.set(null)" />
 }
 

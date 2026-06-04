@@ -21,7 +21,11 @@ export class LibraryComponent {
   private platformId = inject(PLATFORM_ID);
 
   showAddModal = signal(false);
-  selectedBook = signal<Book | null>(null);
+  selectedBookId = signal<string | null>(null);
+  selectedBook = computed(() => {
+    const id = this.selectedBookId();
+    return id ? (this.bookService.books().find(b => b.id === id) ?? null) : null;
+  });
   searchQuery  = signal('');
 
   private calcShelfSize(): number {

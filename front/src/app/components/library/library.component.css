@@ -493,6 +493,7 @@
 .shelf-books {
   display: flex;
   gap: 1.25rem;
+  justify-content: center;
   align-items: flex-end;
   padding: 20px 1.5rem 0.6rem;
   flex-wrap: nowrap;
